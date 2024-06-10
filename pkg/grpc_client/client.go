@@ -30,11 +30,11 @@ func New(cfg config.Config) (*GrpcClient, error) {
 	return &GrpcClient{
 		cfg: cfg,
 		connections: map[string]interface{}{
-			"catalog_service_go": pc.NewCategoryServiceClient(connCatalog),
+			"category_service": pc.NewCategoryServiceClient(connCatalog),
 		},
 	}, nil
 }
 
 func (g *GrpcClient) CategoryService() pc.CategoryServiceClient {
-	return g.connections["catalog_service_go"].(pc.CategoryServiceClient)
+	return g.connections["category_service"].(pc.CategoryServiceClient)
 }

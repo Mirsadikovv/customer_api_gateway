@@ -2,12 +2,13 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.12.4
-// source: main.proto
+// source: category.proto
 
 package catalog_service
 
 import (
 	context "context"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -26,7 +27,7 @@ type CategoryServiceClient interface {
 	GetByID(ctx context.Context, in *CategoryPrimaryKey, opts ...grpc.CallOption) (*GetCategory, error)
 	GetList(ctx context.Context, in *GetListCategoryRequest, opts ...grpc.CallOption) (*GetListCategoryResponse, error)
 	Update(ctx context.Context, in *UpdateCategory, opts ...grpc.CallOption) (*GetCategory, error)
-	Delete(ctx context.Context, in *CategoryPrimaryKey, opts ...grpc.CallOption) (*Empty, error)
+	Delete(ctx context.Context, in *CategoryPrimaryKey, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
 type categoryServiceClient struct {
@@ -73,8 +74,8 @@ func (c *categoryServiceClient) Update(ctx context.Context, in *UpdateCategory, 
 	return out, nil
 }
 
-func (c *categoryServiceClient) Delete(ctx context.Context, in *CategoryPrimaryKey, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *categoryServiceClient) Delete(ctx context.Context, in *CategoryPrimaryKey, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
 	err := c.cc.Invoke(ctx, "/catalog_service_go.CategoryService/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -90,7 +91,7 @@ type CategoryServiceServer interface {
 	GetByID(context.Context, *CategoryPrimaryKey) (*GetCategory, error)
 	GetList(context.Context, *GetListCategoryRequest) (*GetListCategoryResponse, error)
 	Update(context.Context, *UpdateCategory) (*GetCategory, error)
-	Delete(context.Context, *CategoryPrimaryKey) (*Empty, error)
+	Delete(context.Context, *CategoryPrimaryKey) (*empty.Empty, error)
 	mustEmbedUnimplementedCategoryServiceServer()
 }
 
@@ -110,7 +111,7 @@ func (UnimplementedCategoryServiceServer) GetList(context.Context, *GetListCateg
 func (UnimplementedCategoryServiceServer) Update(context.Context, *UpdateCategory) (*GetCategory, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedCategoryServiceServer) Delete(context.Context, *CategoryPrimaryKey) (*Empty, error) {
+func (UnimplementedCategoryServiceServer) Delete(context.Context, *CategoryPrimaryKey) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedCategoryServiceServer) mustEmbedUnimplementedCategoryServiceServer() {}
@@ -245,5 +246,5 @@ var CategoryService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "main.proto",
+	Metadata: "category.proto",
 }

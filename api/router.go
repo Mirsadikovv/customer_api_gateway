@@ -6,7 +6,9 @@ import (
 	"customer-api-gateway/config"
 	"customer-api-gateway/pkg/grpc_client"
 	"customer-api-gateway/pkg/logger"
+	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -19,23 +21,27 @@ type Config struct {
 	Cfg        config.Config
 }
 
+// New ...
+// @title           Swagger Category Service API
+// @version         1.0
+// @description     This is a Catalog service server celler server.
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
 func New(cnf Config) *gin.Engine {
 	r := gin.New()
 
-	r.Static("/images", "./static/images")
+	// r.Static("/images", "./static/images")
 
 	r.Use(gin.Logger())
 
 	r.Use(gin.Recovery())
 
-	// config := cors.DefaultConfig()
-	// config.AllowAllOrigins = true
-	// config.AllowHeaders = append(config.AllowHeaders, "*")
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowHeaders = append(config.AllowHeaders, "*")
 	// config.AllowOrigins = cnf.Cfg.AllowOrigins
-	// r.Use(cors.New(config))
+	r.Use(cors.New(config))
 
 	handler := handler.New(&handler.HandlerConfig{
 		Logger:     cnf.Logger,
@@ -43,14 +49,17 @@ func New(cnf Config) *gin.Engine {
 		Cfg:        cnf.Cfg,
 	})
 
-	// r.GET("/", func(c *gin.Context) {
-	// 	c.JSON(http.StatusOK, gin.H{"data": "Api gateway"})
-	// })
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": "Api gateway"})
+	})
 
-	r.GET("/get_list_category", handler.GetListCategory)
+	r.GET("/category/getall", handler.GetAllCategory)
+	r.GET("/category/get/:id", handler.GetCategoryById)
+	r.POST("/category/create", handler.CreateCategory)
+	r.PUT("/category/update", handler.UpdateCategory)
+	r.DELETE("/category/delete/:id", handler.DeleteCategory)
 
-	// Shipper endpoints
-	url := ginSwagger.URL("swagger/doc.json") // The url pointing to API definition
+	url := ginSwagger.URL("swagger/doc.json")
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	return r

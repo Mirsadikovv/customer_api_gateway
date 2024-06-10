@@ -1,7 +1,7 @@
 package handler
 
 import (
-	ct "customer-api-gateway/genproto/catalog_service"
+	"customer-api-gateway/genproto/catalog_service"
 	"fmt"
 	"net/http"
 
@@ -9,16 +9,21 @@ import (
 )
 
 // @Security ApiKeyAuth
-// @Router /get_list_category [GET]
-// @Summary Create On Demand Order
-// @Description API for creating on demand order
-// @Tags order
+// @Router /category/getall [GET]
+// @Summary Get all categories
+// @Description API for getting all categories
+// @Tags category
 // @Accept  json
 // @Produce  json
-// @Failure 404 {object} models.ResponseError
-// @Failure 500 {object} models.ResponseError
-func (h *handler) GetListCategory(c *gin.Context) {
-	category := &ct.GetListCategoryRequest{}
+// @Param		search query string false "search"
+// @Param		page query int false "page"
+// @Param		limit query int false "limit"
+// @Success		200  {object}  models.ResponseError
+// @Failure		400  {object}  models.ResponseError
+// @Failure		404  {object}  models.ResponseError
+// @Failure		500  {object}  models.ResponseError
+func (h *handler) GetAllCategory(c *gin.Context) {
+	category := &catalog_service.GetListCategoryRequest{}
 
 	search := c.Query("search")
 
@@ -41,6 +46,108 @@ func (h *handler) GetListCategory(c *gin.Context) {
 	resp, err := h.grpcClient.CategoryService().GetList(c.Request.Context(), category)
 	if err != nil {
 		handleGrpcErrWithDescription(c, h.log, err, "error while creating category")
+		return
+	}
+	c.JSON(http.StatusOK, resp)
+}
+
+// @Security ApiKeyAuth
+// @Router /category/create [POST]
+// @Summary Create category
+// @Description API for creating categories
+// @Tags category
+// @Accept  json
+// @Produce  json
+// @Param		category body  catalog_service.CreateCategory true "category"
+// @Success		200  {object}  models.ResponseError
+// @Failure		400  {object}  models.ResponseError
+// @Failure		404  {object}  models.ResponseError
+// @Failure		500  {object}  models.ResponseError
+func (h *handler) CreateCategory(c *gin.Context) {
+	category := &catalog_service.CreateCategory{}
+	if err := c.ShouldBindJSON(&category); err != nil {
+		handleGrpcErrWithDescription(c, h.log, err, "error while reading body")
+		return
+	}
+
+	resp, err := h.grpcClient.CategoryService().Create(c.Request.Context(), category)
+	if err != nil {
+		handleGrpcErrWithDescription(c, h.log, err, "error while creating category")
+		return
+	}
+	c.JSON(http.StatusOK, resp)
+}
+
+// @Security ApiKeyAuth
+// @Router /category/update [PUT]
+// @Summary Update category
+// @Description API for Updating categories
+// @Tags category
+// @Accept  json
+// @Produce  json
+// @Param		category body  catalog_service.UpdateCategory true "category"
+// @Success		200  {object}  models.ResponseError
+// @Failure		400  {object}  models.ResponseError
+// @Failure		404  {object}  models.ResponseError
+// @Failure		500  {object}  models.ResponseError
+func (h *handler) UpdateCategory(c *gin.Context) {
+	category := &catalog_service.UpdateCategory{}
+	if err := c.ShouldBindJSON(&category); err != nil {
+		handleGrpcErrWithDescription(c, h.log, err, "error while reading body")
+		return
+	}
+
+	resp, err := h.grpcClient.CategoryService().Update(c.Request.Context(), category)
+	if err != nil {
+		handleGrpcErrWithDescription(c, h.log, err, "error while updating category")
+		return
+	}
+	c.JSON(http.StatusOK, resp)
+}
+
+// @Security ApiKeyAuth
+// @Router /category/get/{id} [GET]
+// @Summary Get category
+// @Description API for getting category
+// @Tags category
+// @Accept  json
+// @Produce  json
+// @Param 		id path string true "id"
+// @Success		200  {object}  models.ResponseError
+// @Failure		400  {object}  models.ResponseError
+// @Failure		404  {object}  models.ResponseError
+// @Failure		500  {object}  models.ResponseError
+func (h *handler) GetCategoryById(c *gin.Context) {
+	id := c.Param("id")
+	category := &catalog_service.CategoryPrimaryKey{Id: id}
+
+	resp, err := h.grpcClient.CategoryService().GetByID(c.Request.Context(), category)
+	if err != nil {
+		handleGrpcErrWithDescription(c, h.log, err, "error while getting category")
+		return
+	}
+	c.JSON(http.StatusOK, resp)
+}
+
+// @Security ApiKeyAuth
+// @Router /category/delete/{id} [DELETE]
+// @Summary Delete category
+// @Description API for deleting category
+// @Tags category
+// @Accept  json
+// @Produce  json
+// @Param 		id path string true "id"
+// @Success		200  {object}  models.ResponseError
+// @Failure		400  {object}  models.ResponseError
+// @Failure		404  {object}  models.ResponseError
+// @Failure		500  {object}  models.ResponseError
+func (h *handler) DeleteCategory(c *gin.Context) {
+	id := c.Param("id")
+	category := &catalog_service.CategoryPrimaryKey{Id: id}
+
+	resp, err := h.grpcClient.CategoryService().Delete(c.Request.Context(), category)
+	if err != nil {
+		handleGrpcErrWithDescription(c, h.log, err, "error while deleting category")
 		return
 	}
 	c.JSON(http.StatusOK, resp)

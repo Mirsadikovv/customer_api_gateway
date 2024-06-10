@@ -44,3 +44,9 @@ type ErrorReason struct {
 type ResponseResult struct {
 	Result string `json:"result"`
 }
+
+type GetListCategoryRequest struct {
+	Offset int64  `protobuf:"varint,1,opt,name=offset,proto3" json:"offset,omitempty"`
+	Limit  int64  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
+	Search string `protobuf:"bytes,3,opt,name=search,proto3" json:"search,omitempty"`
+}
