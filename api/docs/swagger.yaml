@@ -35,6 +35,75 @@ definitions:
     properties:
       error: {}
     type: object
+  product_service.CreateProduct:
+    properties:
+      active:
+        type: boolean
+      description_en:
+        type: string
+      description_ru:
+        type: string
+      description_uz:
+        type: string
+      discount_percent:
+        type: number
+      in_price:
+        type: number
+      left_count:
+        type: integer
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+      order_no:
+        type: integer
+      out_price:
+        type: number
+    type: object
+  product_service.UpdateProduct:
+    properties:
+      active:
+        type: boolean
+      description_en:
+        type: string
+      description_ru:
+        type: string
+      description_uz:
+        type: string
+      discount_percent:
+        type: number
+      id:
+        type: string
+      in_price:
+        type: number
+      left_count:
+        type: integer
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+      order_no:
+        type: integer
+      out_price:
+        type: number
+    type: object
+  review_service.CreateReview:
+    properties:
+      customer_id:
+        type: string
+      order_id:
+        type: string
+      product_id:
+        type: string
+      rating:
+        type: number
+      text:
+        type: string
+    type: object
 info:
   contact: {}
   description: This is a Catalog service server celler server.
@@ -225,6 +294,308 @@ paths:
       summary: Update category
       tags:
       - category
+  /product/create:
+    post:
+      consumes:
+      - application/json
+      description: API for creating categories
+      parameters:
+      - description: product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/product_service.CreateProduct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Create product
+      tags:
+      - product
+  /product/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: API for deleting product
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete product
+      tags:
+      - product
+  /product/get/{id}:
+    get:
+      consumes:
+      - application/json
+      description: API for getting product
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get product
+      tags:
+      - product
+  /product/getall:
+    get:
+      consumes:
+      - application/json
+      description: API for getting all categories
+      parameters:
+      - description: search
+        in: query
+        name: search
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all categories
+      tags:
+      - product
+  /product/update:
+    put:
+      consumes:
+      - application/json
+      description: API for Updating categories
+      parameters:
+      - description: product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/product_service.UpdateProduct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Update product
+      tags:
+      - product
+  /review/create:
+    post:
+      consumes:
+      - application/json
+      description: API for creating reviews
+      parameters:
+      - description: review
+        in: body
+        name: review
+        required: true
+        schema:
+          $ref: '#/definitions/review_service.CreateReview'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Create review
+      tags:
+      - review
+  /review/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: API for deleting review
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete review
+      tags:
+      - review
+  /review/getall/{id}:
+    get:
+      consumes:
+      - application/json
+      description: API for getting all reviews
+      parameters:
+      - description: search
+        in: query
+        name: search
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all reviews
+      tags:
+      - review
 securityDefinitions:
   ApiKeyAuth:
     in: header

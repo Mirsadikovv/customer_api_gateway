@@ -59,6 +59,16 @@ func New(cnf Config) *gin.Engine {
 	r.PUT("/category/update", handler.UpdateCategory)
 	r.DELETE("/category/delete/:id", handler.DeleteCategory)
 
+	r.GET("/product/getall", handler.GetAllProduct)
+	r.GET("/product/get/:id", handler.GetProductById)
+	r.POST("/product/create", handler.CreateProduct)
+	r.PUT("/product/update", handler.UpdateProduct)
+	r.DELETE("/product/delete/:id", handler.DeleteProduct)
+
+	r.GET("/review/getall/:id", handler.GetAllReview)
+	r.POST("/review/create", handler.CreateReview)
+	r.DELETE("/review/delete/:id", handler.DeleteReview)
+
 	url := ginSwagger.URL("swagger/doc.json")
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 

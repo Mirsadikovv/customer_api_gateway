@@ -3,6 +3,9 @@ package grpc_client
 import (
 	"customer-api-gateway/config"
 	pc "customer-api-gateway/genproto/catalog_service"
+	pd "customer-api-gateway/genproto/product_service"
+	rv "customer-api-gateway/genproto/review_service"
+
 	"fmt"
 
 	"google.golang.org/grpc"
@@ -11,6 +14,8 @@ import (
 
 type GrpcClientI interface {
 	CategoryService() pc.CategoryServiceClient
+	ProductService() pc.CategoryServiceClient
+	ReviewService() rv.ReviewServiceClient
 }
 
 type GrpcClient struct {
@@ -31,10 +36,20 @@ func New(cfg config.Config) (*GrpcClient, error) {
 		cfg: cfg,
 		connections: map[string]interface{}{
 			"category_service": pc.NewCategoryServiceClient(connCatalog),
+			"product_service":  pd.NewProductServiceClient(connCatalog),
+			"review_service":   rv.NewReviewServiceClient(connCatalog),
 		},
 	}, nil
 }
 
 func (g *GrpcClient) CategoryService() pc.CategoryServiceClient {
 	return g.connections["category_service"].(pc.CategoryServiceClient)
+}
+
+func (g *GrpcClient) ProductService() pd.ProductServiceClient {
+	return g.connections["product_service"].(pd.ProductServiceClient)
+}
+
+func (g *GrpcClient) ReviewService() rv.ReviewServiceClient {
+	return g.connections["review_service"].(rv.ReviewServiceClient)
 }
