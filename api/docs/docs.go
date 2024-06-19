@@ -843,6 +843,9 @@ const docTemplate = `{
                 "active": {
                     "type": "boolean"
                 },
+                "category_id": {
+                    "type": "string"
+                },
                 "description_en": {
                     "type": "string"
                 },
@@ -883,6 +886,9 @@ const docTemplate = `{
             "properties": {
                 "active": {
                     "type": "boolean"
+                },
+                "category_id": {
+                    "type": "string"
                 },
                 "description_en": {
                     "type": "string"

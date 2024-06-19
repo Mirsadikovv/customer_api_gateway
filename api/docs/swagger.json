@@ -835,6 +835,9 @@
                 "active": {
                     "type": "boolean"
                 },
+                "category_id": {
+                    "type": "string"
+                },
                 "description_en": {
                     "type": "string"
                 },
@@ -875,6 +878,9 @@
             "properties": {
                 "active": {
                     "type": "boolean"
+                },
+                "category_id": {
+                    "type": "string"
                 },
                 "description_en": {
                     "type": "string"
