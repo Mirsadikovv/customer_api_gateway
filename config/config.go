@@ -19,6 +19,8 @@ type Config struct {
 
 	CatalogServiceHost string
 	CatalogServicePort string
+	OrderServiceHost   string
+	OrderServicePort   string
 
 	LogLevel string
 	HTTPPort string
@@ -42,6 +44,9 @@ func Load() Config {
 
 	c.CatalogServiceHost = cast.ToString(getOrReturnDefault("CATALOG_SERVICE_HOST", "localhost"))
 	c.CatalogServicePort = cast.ToString(getOrReturnDefault("CATALOG_GRPC_PORT", "8082"))
+
+	c.OrderServiceHost = cast.ToString(getOrReturnDefault("ORDER_SERVICE_HOST", "localhost"))
+	c.OrderServicePort = cast.ToString(getOrReturnDefault("ORDER_SERVICE_PORT", "8081"))
 
 	return c
 }
