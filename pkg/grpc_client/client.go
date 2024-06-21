@@ -5,11 +5,13 @@ import (
 	pc "customer-api-gateway/genproto/catalog_service"
 	pd "customer-api-gateway/genproto/product_service"
 	rv "customer-api-gateway/genproto/review_service"
+	"log"
 
 	op "customer-api-gateway/genproto/order_product"
 	os "customer-api-gateway/genproto/order_status_notes"
 	ct "customer-api-gateway/genproto/orders_service"
 
+	us "customer-api-gateway/genproto/user_service"
 	"fmt"
 
 	"google.golang.org/grpc"
@@ -83,4 +85,49 @@ func (o *GrpcClient) OrderService() ct.OrderServiceClient {
 
 func (o *GrpcClient) OrderStatus() os.OrderStatusServiceClient {
 	return o.connections["order_status"].(os.OrderStatusServiceClient)
+}
+
+func (g *GrpcClient) UserService() us.CustomerServiceClient {
+	client, ok := g.connections["user_service"].(us.CustomerServiceClient)
+	if !ok {
+		log.Println("failed to assert type for user_service")
+		return nil
+	}
+	return client
+}
+
+func (g *GrpcClient) SystemUserService() us.UsServiceClient {
+	client, ok := g.connections["system_user"].(us.UsServiceClient)
+	if !ok {
+		log.Println("failed to assert type for system_user")
+		return nil
+	}
+	return client
+}
+
+func (g *GrpcClient) SellerService() us.SellerServiceClient {
+	client, ok := g.connections["seller"].(us.SellerServiceClient)
+	if !ok {
+		log.Println("failed to assert type for seller")
+		return nil
+	}
+	return client
+}
+
+func (g *GrpcClient) BranchService() us.BranchServiceClient {
+	client, ok := g.connections["branch"].(us.BranchServiceClient)
+	if !ok {
+		log.Println("failed to assert type for branch")
+		return nil
+	}
+	return client
+}
+
+func (g *GrpcClient) ShopService() us.ShopServiceClient {
+	client, ok := g.connections["shop"].(us.ShopServiceClient)
+	if !ok {
+		log.Println("failed to assert type for shop")
+		return nil
+	}
+	return client
 }

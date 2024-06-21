@@ -8,7 +8,7 @@ import (
 )
 
 // @Security ApiKeyAuth
-// @Router /review/getall/{id} [GET]
+// @Router /v1/review/getall/{id} [GET]
 // @Summary Get all reviews
 // @Description API for getting all reviews
 // @Tags review
@@ -52,7 +52,7 @@ func (h *handler) GetAllReview(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /review/create [POST]
+// @Router /v1/review/create [POST]
 // @Summary Create review
 // @Description API for creating reviews
 // @Tags review
@@ -79,7 +79,7 @@ func (h *handler) CreateReview(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /review/delete/{id} [DELETE]
+// @Router /v1/review/delete/{id} [DELETE]
 // @Summary Delete review
 // @Description API for deleting review
 // @Tags review

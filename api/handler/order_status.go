@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Router /order-status [POST]
+// @Router /v1/order-status [POST]
 // @Summary		Update order status by ID
 // @Description	This API create the status of an order
 // @Tags		order_status
@@ -43,7 +43,7 @@ func (h *handler) CreateOrderstatus(c *gin.Context) {
 	c.JSON(http.StatusCreated, resp)
 }
 
-// @Router		/order-status/{id} [GET]
+// @Router		/v1/order-status/{id} [GET]
 // @Summary		Get by id a orderstatus
 // @Description	This api get a order by id
 // @Tags		order_status
@@ -67,7 +67,7 @@ func (h *handler) OrderStatusById(c *gin.Context) {
 	c.JSON(http.StatusCreated, data)
 }
 
-// @Router     /order-status [PATCH]
+// @Router     /v1/order-status [PATCH]
 // @Summary    Update order status by ID
 // @Description This API updates the status of an order by ID
 // @Tags       order_status
@@ -111,7 +111,7 @@ func (h *handler) OrderStatusPatch(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// @Router		/order-statusp/{id} [GET]
+// @Router		/v1/order-statusp/{id} [GET]
 // @Summary		Get by id a orderstatusputch
 // @Description	This API gets an order by ID
 // @Tags		order_statusp

@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Router /orders [post]
+// @Router /v1/orders [post]
 // @Summary Create Order
 // @Description API for creating a order
 // @Tags   orders
@@ -64,7 +64,7 @@ func (h *handler) CreateOrders(c *gin.Context) {
 	c.JSON(http.StatusCreated, resp)
 }
 
-// @Router		/orders/{id} [get]
+// @Router		/v1/orders/{id} [get]
 // @Summary		Get by id a order
 // @Description	This api get a order by id
 // @Tags		orders

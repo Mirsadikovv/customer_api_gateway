@@ -1,17 +1,17 @@
 package handler
 
 import (
-	"customer-api-gateway/genproto/product_service"
+	"customer-api-gateway/genproto/catalog_service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 // @Security ApiKeyAuth
-// @Router /product/getall [GET]
+// @Router /v1/category/getall [GET]
 // @Summary Get all categories
 // @Description API for getting all categories
-// @Tags product
+// @Tags category
 // @Accept  json
 // @Produce  json
 // @Param		search query string false "search"
@@ -21,8 +21,8 @@ import (
 // @Failure		400  {object}  models.ResponseError
 // @Failure		404  {object}  models.ResponseError
 // @Failure		500  {object}  models.ResponseError
-func (h *handler) GetAllProduct(c *gin.Context) {
-	product := &product_service.GetListProductRequest{}
+func (h *handler) GetAllCategory(c *gin.Context) {
+	category := &catalog_service.GetListCategoryRequest{}
 
 	search := c.Query("search")
 
@@ -37,77 +37,77 @@ func (h *handler) GetAllProduct(c *gin.Context) {
 		return
 	}
 
-	product.Search = search
-	product.Offset = int64(page)
-	product.Limit = int64(limit)
+	category.Search = search
+	category.Offset = int64(page)
+	category.Limit = int64(limit)
 
-	resp, err := h.grpcClient.ProductService().GetList(c.Request.Context(), product)
+	resp, err := h.grpcClient.CategoryService().GetList(c.Request.Context(), category)
 	if err != nil {
-		handleGrpcErrWithDescription(c, h.log, err, "error while creating product")
+		handleGrpcErrWithDescription(c, h.log, err, "error while creating category")
 		return
 	}
 	c.JSON(http.StatusOK, resp)
 }
 
 // @Security ApiKeyAuth
-// @Router /product/create [POST]
-// @Summary Create product
+// @Router /v1/category/create [POST]
+// @Summary Create category
 // @Description API for creating categories
-// @Tags product
+// @Tags category
 // @Accept  json
 // @Produce  json
-// @Param		product body  product_service.CreateProduct true "product"
+// @Param		category body  catalog_service.CreateCategory true "category"
 // @Success		200  {object}  models.ResponseError
 // @Failure		400  {object}  models.ResponseError
 // @Failure		404  {object}  models.ResponseError
 // @Failure		500  {object}  models.ResponseError
-func (h *handler) CreateProduct(c *gin.Context) {
-	product := &product_service.CreateProduct{}
-	if err := c.ShouldBindJSON(&product); err != nil {
+func (h *handler) CreateCategory(c *gin.Context) {
+	category := &catalog_service.CreateCategory{}
+	if err := c.ShouldBindJSON(&category); err != nil {
 		handleGrpcErrWithDescription(c, h.log, err, "error while reading body")
 		return
 	}
 
-	resp, err := h.grpcClient.ProductService().Create(c.Request.Context(), product)
+	resp, err := h.grpcClient.CategoryService().Create(c.Request.Context(), category)
 	if err != nil {
-		handleGrpcErrWithDescription(c, h.log, err, "error while creating product")
+		handleGrpcErrWithDescription(c, h.log, err, "error while creating category")
 		return
 	}
 	c.JSON(http.StatusOK, resp)
 }
 
 // @Security ApiKeyAuth
-// @Router /product/update [PUT]
-// @Summary Update product
+// @Router /v1/category/update [PUT]
+// @Summary Update category
 // @Description API for Updating categories
-// @Tags product
+// @Tags category
 // @Accept  json
 // @Produce  json
-// @Param		product body  product_service.UpdateProduct true "product"
+// @Param		category body  catalog_service.UpdateCategory true "category"
 // @Success		200  {object}  models.ResponseError
 // @Failure		400  {object}  models.ResponseError
 // @Failure		404  {object}  models.ResponseError
 // @Failure		500  {object}  models.ResponseError
-func (h *handler) UpdateProduct(c *gin.Context) {
-	product := &product_service.UpdateProduct{}
-	if err := c.ShouldBindJSON(&product); err != nil {
+func (h *handler) UpdateCategory(c *gin.Context) {
+	category := &catalog_service.UpdateCategory{}
+	if err := c.ShouldBindJSON(&category); err != nil {
 		handleGrpcErrWithDescription(c, h.log, err, "error while reading body")
 		return
 	}
 
-	resp, err := h.grpcClient.ProductService().Update(c.Request.Context(), product)
+	resp, err := h.grpcClient.CategoryService().Update(c.Request.Context(), category)
 	if err != nil {
-		handleGrpcErrWithDescription(c, h.log, err, "error while updating product")
+		handleGrpcErrWithDescription(c, h.log, err, "error while updating category")
 		return
 	}
 	c.JSON(http.StatusOK, resp)
 }
 
 // @Security ApiKeyAuth
-// @Router /product/get/{id} [GET]
-// @Summary Get product
-// @Description API for getting product
-// @Tags product
+// @Router /v1/category/get/{id} [GET]
+// @Summary Get category
+// @Description API for getting category
+// @Tags category
 // @Accept  json
 // @Produce  json
 // @Param 		id path string true "id"
@@ -115,23 +115,23 @@ func (h *handler) UpdateProduct(c *gin.Context) {
 // @Failure		400  {object}  models.ResponseError
 // @Failure		404  {object}  models.ResponseError
 // @Failure		500  {object}  models.ResponseError
-func (h *handler) GetProductById(c *gin.Context) {
+func (h *handler) GetCategoryById(c *gin.Context) {
 	id := c.Param("id")
-	product := &product_service.ProductPrimaryKey{Id: id}
+	category := &catalog_service.CategoryPrimaryKey{Id: id}
 
-	resp, err := h.grpcClient.ProductService().GetByID(c.Request.Context(), product)
+	resp, err := h.grpcClient.CategoryService().GetByID(c.Request.Context(), category)
 	if err != nil {
-		handleGrpcErrWithDescription(c, h.log, err, "error while getting product")
+		handleGrpcErrWithDescription(c, h.log, err, "error while getting category")
 		return
 	}
 	c.JSON(http.StatusOK, resp)
 }
 
 // @Security ApiKeyAuth
-// @Router /product/delete/{id} [DELETE]
-// @Summary Delete product
-// @Description API for deleting product
-// @Tags product
+// @Router /v1/category/delete/{id} [DELETE]
+// @Summary Delete category
+// @Description API for deleting category
+// @Tags category
 // @Accept  json
 // @Produce  json
 // @Param 		id path string true "id"
@@ -139,13 +139,13 @@ func (h *handler) GetProductById(c *gin.Context) {
 // @Failure		400  {object}  models.ResponseError
 // @Failure		404  {object}  models.ResponseError
 // @Failure		500  {object}  models.ResponseError
-func (h *handler) DeleteProduct(c *gin.Context) {
+func (h *handler) DeleteCategory(c *gin.Context) {
 	id := c.Param("id")
-	product := &product_service.ProductPrimaryKey{Id: id}
+	category := &catalog_service.CategoryPrimaryKey{Id: id}
 
-	resp, err := h.grpcClient.ProductService().Delete(c.Request.Context(), product)
+	resp, err := h.grpcClient.CategoryService().Delete(c.Request.Context(), category)
 	if err != nil {
-		handleGrpcErrWithDescription(c, h.log, err, "error while deleting product")
+		handleGrpcErrWithDescription(c, h.log, err, "error while deleting category")
 		return
 	}
 	c.JSON(http.StatusOK, resp)
