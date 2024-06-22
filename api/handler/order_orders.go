@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Security ApiKeyAuth
 // @Router /v1/orders [post]
 // @Summary Create Order
 // @Description API for creating a order
@@ -64,6 +65,7 @@ func (h *handler) CreateOrders(c *gin.Context) {
 	c.JSON(http.StatusCreated, resp)
 }
 
+// @Security ApiKeyAuth
 // @Router		/v1/orders/{id} [get]
 // @Summary		Get by id a order
 // @Description	This api get a order by id

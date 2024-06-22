@@ -11,7 +11,9 @@ import (
 	os "customer-api-gateway/genproto/order_status_notes"
 	ct "customer-api-gateway/genproto/orders_service"
 
+	as "customer-api-gateway/genproto/auth_service"
 	us "customer-api-gateway/genproto/user_service"
+
 	"fmt"
 
 	"google.golang.org/grpc"
@@ -26,6 +28,12 @@ type GrpcClientI interface {
 	ProducOrderService() op.OrderProductsServiceClient
 	OrderService() ct.OrderServiceServer
 	OrderStatus() os.OrderStatusServiceClient
+
+	UserService() us.CustomerServiceClient
+	SystemUserService() us.UsServiceClient
+	SellerService() us.SellerServiceClient
+	BranchService() us.BranchServiceClient
+	ShopService() us.ShopServiceClient
 }
 
 type GrpcClient struct {
@@ -39,7 +47,7 @@ func New(cfg config.Config) (*GrpcClient, error) {
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
-		return nil, fmt.Errorf("catalog service dial host: %s port:%s err: %s",
+		return nil, fmt.Errorf("catalog service dial host: %v port:%v err: %v",
 			cfg.CatalogServiceHost, cfg.CatalogServicePort, err)
 	}
 	connOrder, err := grpc.NewClient(
@@ -47,9 +55,28 @@ func New(cfg config.Config) (*GrpcClient, error) {
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
-		return nil, fmt.Errorf("order service dial hsot:%s port :%s err:%s",
+		return nil, fmt.Errorf("order service dial hsot:%v port :%v err:%v",
 			cfg.OrderServiceHost, cfg.OrderServicePort, err)
 	}
+
+	connUser, err := grpc.NewClient(
+		fmt.Sprintf("%s:%s", cfg.UserServiceHost, cfg.UserServicePort),
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	if err != nil {
+		return nil, fmt.Errorf("user service dial host: %v port :%v err:%v",
+			cfg.UserServiceHost, cfg.UserServicePort, err)
+	}
+
+	connAuth, err := grpc.NewClient(
+		fmt.Sprintf("%s:%s", cfg.AuthServiceHost, cfg.AuthServicePort),
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	if err != nil {
+		return nil, fmt.Errorf("catalog service dial host: %s port:%s err: %s",
+			cfg.AuthServiceHost, cfg.AuthServicePort, err)
+	}
+
 	return &GrpcClient{
 		cfg: cfg,
 		connections: map[string]interface{}{
@@ -59,6 +86,14 @@ func New(cfg config.Config) (*GrpcClient, error) {
 			"orderproduct_service": op.NewOrderProductsServiceClient(connOrder),
 			"order_service":        ct.NewOrderServiceClient(connOrder),
 			"order_status":         os.NewOrderStatusServiceClient(connOrder),
+			"user_service":         us.NewCustomerServiceClient(connUser),
+			"system_user":          us.NewUsServiceClient(connUser),
+			"seller":               us.NewSellerServiceClient(connUser),
+			"branch":               us.NewBranchServiceClient(connUser),
+			"shop":                 us.NewShopServiceClient(connUser),
+			"customer_auth":        as.NewCustomerAuthClient(connAuth),
+			"seller_auth":          as.NewSellerAuthClient(connAuth),
+			"system_user_auth":     as.NewSystemUserAuthClient(connAuth),
 		},
 	}, nil
 }
@@ -130,4 +165,16 @@ func (g *GrpcClient) ShopService() us.ShopServiceClient {
 		return nil
 	}
 	return client
+}
+
+func (g *GrpcClient) AuthCustomerService() as.CustomerAuthClient {
+	return g.connections["customer_auth"].(as.CustomerAuthClient)
+}
+
+func (g *GrpcClient) AuthSellerService() as.SellerAuthClient {
+	return g.connections["seller_auth"].(as.SellerAuthClient)
+}
+
+func (g *GrpcClient) AuthSystemUserService() as.SystemUserAuthClient {
+	return g.connections["system_user_auth"].(as.SystemUserAuthClient)
 }

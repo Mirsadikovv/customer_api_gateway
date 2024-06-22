@@ -22,9 +22,9 @@ type Config struct {
 }
 
 // New ...
-// @title           Swagger Category Service API
+// @title           Swagger Uzum-market(clone) API
 // @version         1.0
-// @description     This is a Catalog service server celler server.
+// @description     This is a Uzum-market celler server.
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
@@ -111,6 +111,30 @@ func New(cnf Config) *gin.Engine {
 	r.GET("/v1/shop/getbyid/:id", handler.GetShopByID)
 	r.PUT("/v1/shop/update/:id", handler.UpdateShop)
 	r.DELETE("/v1/shop/delete/:id", handler.DeleteShop)
+
+	r.POST("/v1/customer/register", handler.RegisterCustomer)
+	r.POST("/v1/customer/registercomfirm", handler.RegisterConfirmCustomer)
+	r.POST("/v1/customer/loginpassword", handler.LoginPassworCustomer)
+	r.POST("/v1/customer/login", handler.LoginCustomer)
+	r.POST("/v1/customer/loginconfirm", handler.LoginConfirm)
+	r.PUT("/v1/customer/resetpassword", handler.ResetPasswordCustomer)
+	r.PUT("/v1/customer/resetconfirm", handler.ResetPasswordConfirm)
+
+	r.POST("/v1/seller/register", handler.RegisterSeller)
+	r.POST("/v1/seller/registercomfirm", handler.RegisterConfirmSeller)
+	r.POST("/v1/seller/login", handler.LoginSeller)
+	r.POST("/v1/seller/loginpassword ", handler.LoginPassworSeller)
+	r.POST("/v1/seller/loginconfirm", handler.SellerLoginConfirm)
+	r.PUT("/v1/seller/resetpassword", handler.ResetPasswordSeller)
+	r.PUT("/v1/seller/resetconfirm", handler.SellerResetPasswordConfirm)
+
+	r.POST("/v1/systemuser/register", handler.RegisterSystemUser)
+	r.POST("/v1/systemuser/registercomfirm", handler.RegisterConfirmSystemUser)
+	r.POST("/v1/systemuser/login", handler.LoginSystemUser)
+	r.POST("/v1/systemuser/loginpassword", handler.LoginPassworSeller)
+	r.POST("/v1/systemuser/loginconfirm", handler.SystemUserLoginConfirm)
+	r.PUT("/v1/systemuser/resetpassword", handler.ResetPasswordSystemUser)
+	r.PUT("/v1/systemuser/resetconfirm", handler.SystemUserResetPasswordConfirm)
 
 	url := ginSwagger.URL("swagger/doc.json")
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))

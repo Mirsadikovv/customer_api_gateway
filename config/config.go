@@ -21,6 +21,10 @@ type Config struct {
 	CatalogServicePort string
 	OrderServiceHost   string
 	OrderServicePort   string
+	UserServiceHost    string
+	UserServicePort    string
+	AuthServiceHost    string
+	AuthServicePort    string
 
 	LogLevel string
 	HTTPPort string
@@ -43,10 +47,16 @@ func Load() Config {
 	c.RedisPassword = cast.ToString(getOrReturnDefault("REDIS_PASSWORD", "3EEdwhDOfx"))
 
 	c.CatalogServiceHost = cast.ToString(getOrReturnDefault("CATALOG_SERVICE_HOST", "localhost"))
-	c.CatalogServicePort = cast.ToString(getOrReturnDefault("CATALOG_GRPC_PORT", "8082"))
+	c.CatalogServicePort = cast.ToString(getOrReturnDefault("CATALOG_GRPC_PORT", "8081"))
 
 	c.OrderServiceHost = cast.ToString(getOrReturnDefault("ORDER_SERVICE_HOST", "localhost"))
-	c.OrderServicePort = cast.ToString(getOrReturnDefault("ORDER_SERVICE_PORT", "8081"))
+	c.OrderServicePort = cast.ToString(getOrReturnDefault("ORDER_SERVICE_PORT", "8082"))
+
+	c.UserServiceHost = cast.ToString(getOrReturnDefault("USER_SERVICE_HOST", "localhost"))
+	c.UserServicePort = cast.ToString(getOrReturnDefault("USER_SERVICE_PORT", "8083"))
+
+	c.AuthServiceHost = cast.ToString(getOrReturnDefault("USER_SERVICE_HOST", "localhost"))
+	c.AuthServicePort = cast.ToString(getOrReturnDefault("USER_SERVICE_PORT", "8084"))
 
 	return c
 }

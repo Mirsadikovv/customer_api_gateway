@@ -77,7 +77,7 @@ func (h *handler) CreateProduct(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /product/update [PUT]
+// @Router /v1/product/update [PUT]
 // @Summary Update product
 // @Description API for Updating categories
 // @Tags product

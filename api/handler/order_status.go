@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Security ApiKeyAuth
 // @Router /v1/order-status [POST]
 // @Summary		Update order status by ID
 // @Description	This API create the status of an order
@@ -43,6 +44,7 @@ func (h *handler) CreateOrderstatus(c *gin.Context) {
 	c.JSON(http.StatusCreated, resp)
 }
 
+// @Security ApiKeyAuth
 // @Router		/v1/order-status/{id} [GET]
 // @Summary		Get by id a orderstatus
 // @Description	This api get a order by id
@@ -67,6 +69,7 @@ func (h *handler) OrderStatusById(c *gin.Context) {
 	c.JSON(http.StatusCreated, data)
 }
 
+// @Security ApiKeyAuth
 // @Router     /v1/order-status [PATCH]
 // @Summary    Update order status by ID
 // @Description This API updates the status of an order by ID
@@ -78,15 +81,12 @@ func (h *handler) OrderStatusById(c *gin.Context) {
 // @Failure    404 {object} models.Response
 // @Failure    500 {object} models.Response
 func (h *handler) OrderStatusPatch(c *gin.Context) {
-	// Create an instance of OrderPrimaryStatusKeyRequest
 	order := &order_status_notes.OrderPrimaryStatusKeyRequest{}
 
-	// Bind JSON input to the order object
 	if err := c.ShouldBindJSON(order); err != nil {
 		handleGrpcErrWithDescription(c, h.log, err, "error while reading request body")
 		return
 	}
-	//// Get the current status of the order
 	data, err := h.grpcClient.OrderStatus().GetStatusByID(c.Request.Context(), order)
 	if err != nil {
 		handleGrpcErrWithDescription(c, h.log, err, "error while fetching current order status")
@@ -96,12 +96,10 @@ func (h *handler) OrderStatusPatch(c *gin.Context) {
 	fmt.Println("Current status:", data.Status)
 	fmt.Println("New status:", order.Status)
 
-	// Validate the new status against the current status
 	if err := helpers.Validstatusorder(data.Status, order.Status); err != nil {
 		handleGrpcErrWithDescription(c, h.log, err, "invalid status transition")
 		return
 	}
-	// Update the order status
 	resp, err := h.grpcClient.OrderStatus().PUTCH(c.Request.Context(), order)
 	if err != nil {
 		handleGrpcErrWithDescription(c, h.log, err, "error while updating order status")
@@ -111,6 +109,7 @@ func (h *handler) OrderStatusPatch(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Security ApiKeyAuth
 // @Router		/v1/order-statusp/{id} [GET]
 // @Summary		Get by id a orderstatusputch
 // @Description	This API gets an order by ID
@@ -122,22 +121,15 @@ func (h *handler) OrderStatusPatch(c *gin.Context) {
 // @Failure		404 {object} models.Response
 // @Failure		500 {object} models.Response
 func (h *handler) OrderStatusputch(c *gin.Context) {
-	// Create an instance of OrderPrimaryStatusKeyRequest
 	order := &order_status_notes.OrderPrimaryStatusKeyRequest{}
 
-	// Capture the 'id' parameter from the URL path
 	order.OrderId = c.Param("id")
 
-	// Log the captured ID for debugging
-	fmt.Println(order.OrderId, "id______________________")
-
-	// Fetch the status by ID using gRPC client
 	data, err := h.grpcClient.OrderStatus().GetStatusByID(c.Request.Context(), order)
 	if err != nil {
 		handleGrpcErrWithDescription(c, h.log, err, "error while reading request id")
 		return
 	}
 
-	// Return the response
 	c.JSON(http.StatusOK, data)
 }
